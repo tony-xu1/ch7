@@ -18,9 +18,9 @@ public class StockTrader{
         printData(years, months, prices);
         double drop = (prices[indexOfBiggestDrop(prices) - 1] - prices[indexOfBiggestDrop(prices)])/prices[indexOfBiggestDrop(prices) - 1];
         
-        System.out.printf(symbol + " lowest: $%.2f in %s %d\n", prices[indexOfLowest(prices)], monthName(months[indexOfLowest(prices)]), years[indexOfLowest(prices)]);
-        System.out.printf(symbol + " highest: $%.2f in %s %d\n", prices[indexOfHighest(prices)], monthName(months[indexOfHighest(prices)]), years[indexOfHighest(prices)]);
-        System.out.printf(symbol + " biggest drop: %.2f in %s %d\n", drop, monthName(months[indexOfBiggestDrop(prices)]), years[indexOfBiggestDrop(prices)]);
+        //System.out.printf(symbol + " lowest: $%.2f in %s %d\n", prices[indexOfLowest(prices)], monthName(months[indexOfLowest(prices)]), years[indexOfLowest(prices)]);
+        //System.out.printf(symbol + " highest: $%.2f in %s %d\n", prices[indexOfHighest(prices)], monthName(months[indexOfHighest(prices)]), years[indexOfHighest(prices)]);
+        //System.out.printf(symbol + " biggest drop: %.2f in %s %d\n", drop, monthName(months[indexOfBiggestDrop(prices)]), years[indexOfBiggestDrop(prices)]);
 		
 		double result = simulate(years, months, prices);
 		System.out.printf("Final value: $%, .2f%n", result);
@@ -42,7 +42,7 @@ public class StockTrader{
 	
 	public static void printData(int[] years, int[] months, double[] prices){
 		for(int i = 0; i < years.length; i++){
-			System.out.printf("%s %d: %.2f\n", monthName(months[i]), years[i], prices[i]);
+			//System.out.printf("%s %d: %.2f\n", monthName(months[i]), years[i], prices[i]);
 		}
 	}
 	
@@ -123,18 +123,43 @@ public class StockTrader{
 	}
 	
 	public static String dipBuyer(double[] history, boolean holding, double boughtAt){
-		int shares = 0;
-		if (shares = 0){
-			for (int i = 0; i < history.length; i++){
-				if (histroy.length > 2 && history[i] > history[i + 1] && history[i + 1] > history[i + 2]){
+		if (!holding){
+			for (int i = history.length - 3; i < history.length; i++){
+				if (history.length >= 3 && history[i] > history[i + 1] && history[i + 1] > history[i + 2]){
+					boughtAt = history[i + 2];
 					return "BUY";
 				}
 			}
-		} else if (shares != 0){
-			for (int i = 0; i < history.length; i++){
-				if (
+		} else if (holding){
+				if(boughtAt * 1.1 < history[history.length - 1]){
+					return "SELL";
+				}
+			}
+		return "HOLD";
+	}
+	
+	public static String movingAverage(double[] history, boolean holding, double boughtAt){
+		double sum = 0;
+		int n = 0;
+		double avg = 0;
+		for (int i = 0; i < history.length; i++){
+			if (i < 12){
+				sum += history[i];
+				return "HOLD";
+			} else if(i >= 12){
+				sum = sum + history[i] - history[n];
+				n++;
+				avg = sum/12;
+				System.out.println("ran");
+			}
+			if (!holding && history[i] >= avg){
+				boughtAt = history[i];
+				System.out.println("ran");
+				return "BUY";
+			} else if (holding && boughtAt <= avg){
+				return "SELL";
 			}
 		}
+		return "HOLD";
 	}
-
 }
