@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class StockTrader{
 	public static void main (String[] args) throws FileNotFoundException {
-		Scanner in = new Scanner(new File("tiny.txt"));
+		Scanner in = new Scanner(new File("amzn_2000_2010.txt"));
         String symbol = in.next();
         int n = in.nextInt();
         
@@ -115,7 +115,7 @@ public class StockTrader{
 	}
 	
 	public static String decide(double[] history, boolean holding, double boughtAt){
-		return dipBuyer(history, holding, boughtAt);
+		return myStrategy(history, holding, boughtAt);
 	}
 	
 	public static String buyAndHold(double[] history, boolean holding, double boughtAt){
@@ -123,14 +123,13 @@ public class StockTrader{
 	}
 	
 	public static String dipBuyer(double[] history, boolean holding, double boughtAt){
-		if (!holding){
-			for (int i = history.length - 3; i < history.length; i++){
-				if (history.length >= 3 && history[i] > history[i + 1] && history[i + 1] > history[i + 2]){
-					boughtAt = history[i + 2];
+		if (!holding && history.length >= 3){
+			int i = history.length - 3;
+				if (history[i] > history[i + 1] && history[i + 1] > history[i + 2]){
+					
 					return "BUY";
 				}
-			}
-		} else if (holding){
+		} else if (holding && history.length > 0){
 				if(boughtAt * 1.1 < history[history.length - 1]){
 					return "SELL";
 				}
@@ -139,27 +138,84 @@ public class StockTrader{
 	}
 	
 	public static String movingAverage(double[] history, boolean holding, double boughtAt){
+		if (history.length < 12) return "HOLD";
 		double sum = 0;
-		int n = 0;
 		double avg = 0;
-		for (int i = 0; i < history.length; i++){
-			if (i < 12){
-				sum += history[i];
-				return "HOLD";
-			} else if(i >= 12){
-				sum = sum + history[i] - history[n];
-				n++;
+		for (int i = history.length - 12; i < history.length; i++){
+			if(i >= 12){
+				sum = sum + history[i];
 				avg = sum/12;
-				System.out.println("ran");
 			}
-			if (!holding && history[i] >= avg){
-				boughtAt = history[i];
-				System.out.println("ran");
-				return "BUY";
-			} else if (holding && boughtAt <= avg){
-				return "SELL";
-			}
+		}
+		if (!holding && history[history.length - 1] >= avg){
+			return "BUY";
+		} else if (holding && history[history.length - 1] <= avg){
+			return "SELL";
 		}
 		return "HOLD";
 	}
+	
+	public static String myStrategy (double[] history, boolean holding, double boughtAt){
+		if (history.length < 13) return "HOLD";
+		double shortSum = 0;
+		double shortAvg = 0;
+		double longSum = 0;
+		double longAvg = 0;
+		double prevLong = 0;
+		double prevShort = 0;
+		for (int i = history.length - 12; i < history.length; i++){
+				longSum += history[i];
+				longAvg = longSum/12;
+		}
+		longSum = 0;
+		for (int i = history.length - 13; i < history.length - 1; i++){
+				longSum += history[i];
+				prevLong = longSum/12;
+		}
+		
+		for (int i = history.length - 3; i < history.length; i++){
+				shortSum += history[i];
+				shortAvg = shortSum/3;
+		}
+		shortSum = 0;
+		for (int i = history.length - 4; i < history.length - 1; i++){
+				shortSum += history[i];
+				prevShort = shortSum/3;
+		}
+		
+		if(!holding && prevShort < prevLong && shortAvg >= longAvg){
+			return "BUY";
+		} else if (holding && prevShort > prevLong && shortAvg <= longAvg){
+			return "SELL";
+		} 
+		
+		//if (holding){
+		//	if (history[history.length - 1] <= boughtAt * 0.9){
+		//		return "SELL";
+		//	}
+		//	if (history[history.length - 1] >= boughtAt * 1.5){
+		//		return "SELL";
+		//	}
+		//}
+		return "HOLD";
+	}
 }
+
+
+//if (history.length < 1){
+//			return "HOLD";
+//		}
+//		double[] dx = new double[history.length];
+//		double[] dx2 = new double[history.length];
+//		for (int i = 1; i < history.length; i++){
+//			dx[i] = history[i - 1] - history[i];
+//			dx2[i] = dx[i - 1] - dx[i];
+//			
+//			if(!holding && dx[i] >= -5 && dx2[i] > 0){
+//				return "BUY";
+//			} else if(holding && dx[i] <= 5 && dx2[i] < 0){
+//				return "SELL";
+//			} 
+//		}
+//		return "HOLD";
+//	}
