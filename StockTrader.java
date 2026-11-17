@@ -1,3 +1,13 @@
+//PART 2 QUESTIONS
+//1. The stock would have lost value over that decade, and the person who bought the stock would have lost money.
+//2.Yes, the timing makes sense. The lowest prices occur aronfthe Great Recession of 2008.
+
+//STEP E QUESTIONS
+//1. Dip Buyer won on the most files (4), followed by my strategy (3), Buy and Hold (2), and then Moving Average (1).
+//2. Dip buyer struggled on falling, as it kept buying into the "dips," but the stock kept losing value abd didnt go back up.
+//3. Moving average beat buy and hold on aapl_2000_2010. Apple crashed right before exploding up, and moving average protected the money by selling during the downtrend and buying when the upward trend returned.
+//4. My strategy beat buy and hold in 4 files. I mainly focused it on files such as aapl and amzn, which resulted in lower gains for the other files. If I changed the rules to work better on one file, my strategy would tend to perform worse on other files.
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
@@ -5,7 +15,7 @@ import java.util.Scanner;
 
 public class StockTrader{
 	public static void main (String[] args) throws FileNotFoundException {
-		Scanner in = new Scanner(new File("amzn_2000_2010.txt"));
+		Scanner in = new Scanner(new File("tiny.txt"));
         String symbol = in.next();
         int n = in.nextInt();
         
@@ -156,6 +166,11 @@ public class StockTrader{
 	}
 	
 	public static String myStrategy (double[] history, boolean holding, double boughtAt){
+		//golden cross method: essentially, tracks a long term average of 12 months and a short term average of 3 months.
+		//When the short term average becomes higher than the long term average, and you are not holding stocks, return buy.
+		//When the long term average becomes higher than the short term average, and you are holding stocks, return sell.
+		//otherwise, hold.
+		//It works because it signals that the momentum may precede a uptrend.
 		if (history.length < 13) return "HOLD";
 		double shortSum = 0;
 		double shortAvg = 0;
