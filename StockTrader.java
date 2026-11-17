@@ -1,6 +1,6 @@
 //PART 2 QUESTIONS
 //1. The stock would have lost value over that decade, and the person who bought the stock would have lost money.
-//2.Yes, the timing makes sense. The lowest prices occur aronfthe Great Recession of 2008.
+//2.Yes, the timing makes sense. The lowest prices occur aronfthe Great Recession of 2008 and teh Great Depression.
 
 //STEP E QUESTIONS
 //1. Dip Buyer won on the most files (4), followed by my strategy (3), Buy and Hold (2), and then Moving Average (1).
