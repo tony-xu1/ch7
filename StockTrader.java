@@ -18,9 +18,9 @@ public class StockTrader{
         printData(years, months, prices);
         double drop = (prices[indexOfBiggestDrop(prices) - 1] - prices[indexOfBiggestDrop(prices)])/prices[indexOfBiggestDrop(prices) - 1];
         
-        //System.out.printf(symbol + " lowest: $%.2f in %s %d\n", prices[indexOfLowest(prices)], monthName(months[indexOfLowest(prices)]), years[indexOfLowest(prices)]);
-        //System.out.printf(symbol + " highest: $%.2f in %s %d\n", prices[indexOfHighest(prices)], monthName(months[indexOfHighest(prices)]), years[indexOfHighest(prices)]);
-        //System.out.printf(symbol + " biggest drop: %.2f in %s %d\n", drop, monthName(months[indexOfBiggestDrop(prices)]), years[indexOfBiggestDrop(prices)]);
+        System.out.printf(symbol + " lowest: $%.2f in %s %d\n", prices[indexOfLowest(prices)], monthName(months[indexOfLowest(prices)]), years[indexOfLowest(prices)]);
+        System.out.printf(symbol + " highest: $%.2f in %s %d\n", prices[indexOfHighest(prices)], monthName(months[indexOfHighest(prices)]), years[indexOfHighest(prices)]);
+        System.out.printf(symbol + " biggest drop: %.2f in %s %d\n", drop, monthName(months[indexOfBiggestDrop(prices)]), years[indexOfBiggestDrop(prices)]);
 		
 		double result = simulate(years, months, prices);
 		System.out.printf("Final value: $%, .2f%n", result);
@@ -42,7 +42,7 @@ public class StockTrader{
 	
 	public static void printData(int[] years, int[] months, double[] prices){
 		for(int i = 0; i < years.length; i++){
-			//System.out.printf("%s %d: %.2f\n", monthName(months[i]), years[i], prices[i]);
+			System.out.printf("%s %d: %.2f\n", monthName(months[i]), years[i], prices[i]);
 		}
 	}
 	
@@ -188,34 +188,6 @@ public class StockTrader{
 		} else if (holding && prevShort > prevLong && shortAvg <= longAvg){
 			return "SELL";
 		} 
-		
-		//if (holding){
-		//	if (history[history.length - 1] <= boughtAt * 0.9){
-		//		return "SELL";
-		//	}
-		//	if (history[history.length - 1] >= boughtAt * 1.5){
-		//		return "SELL";
-		//	}
-		//}
 		return "HOLD";
 	}
 }
-
-
-//if (history.length < 1){
-//			return "HOLD";
-//		}
-//		double[] dx = new double[history.length];
-//		double[] dx2 = new double[history.length];
-//		for (int i = 1; i < history.length; i++){
-//			dx[i] = history[i - 1] - history[i];
-//			dx2[i] = dx[i - 1] - dx[i];
-//			
-//			if(!holding && dx[i] >= -5 && dx2[i] > 0){
-//				return "BUY";
-//			} else if(holding && dx[i] <= 5 && dx2[i] < 0){
-//				return "SELL";
-//			} 
-//		}
-//		return "HOLD";
-//	}
